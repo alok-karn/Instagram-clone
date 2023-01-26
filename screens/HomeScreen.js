@@ -1,5 +1,6 @@
 import React from "react";
 import { SafeAreaView, View, Text, StyleSheet, ScrollView } from "react-native";
+import BottomTabs, { bottomTabIcons } from "../components/home/BottomTabs";
 import Header from "../components/home/Header";
 import Post from "../components/home/Post";
 import Stories from "../components/home/Stories";
@@ -7,21 +8,22 @@ import { POSTS } from "../data/posts";
 
 export default function HomeScreen() {
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Header />
             <Stories />
-            <ScrollView showsVerticalScrollIndicator={true}>
+            <ScrollView>
                 {POSTS.map((post, index) => (
                     <Post post={post} key={index} />
                 ))}
             </ScrollView>
-        </SafeAreaView>
+            <BottomTabs icons={bottomTabIcons} />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "black",
         flex: 1,
+        backgroundColor: "black",
     },
 });
