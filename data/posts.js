@@ -4,7 +4,7 @@ export const POSTS = [
     {
         id: 0,
         imageURL:
-            "https://cdn.pixabay.com/photo/2018/11/29/21/19/hamburg-3846525__480.jpg",
+            "https://images.unsplash.com/photo-1540331547168-8b63109225b7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=419&q=80",
         user: USERS[0].user,
         likes: " 7,800",
         caption: "This is a caption 😉😉",
