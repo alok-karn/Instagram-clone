@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { Divider } from "react-native-elements";
+import validUrl from "valid-url";
 
 const PLACEHOLDER_IMG =
     "https://t3.ftcdn.net/jpg/03/45/05/92/360_F_345059232_CPieT8RIWOUk4JqBkkWkIETYAkmz2b75.jpg";
@@ -15,13 +16,17 @@ const uploadPostSchema = Yup.object().shape({
     ),
 });
 
-export default function FormikPostUploader() {
+export default function FormikPostUploader({ navigation }) {
     const [thumbnailUrl, setThumbnailUrl] = useState(PLACEHOLDER_IMG);
 
     return (
         <Formik
             initialValues={{ imageURL: "", caption: "" }}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={(values) => {
+                console.log(values);
+                console.log("Your post has been uploaded...");
+                navigation.goBack();
+            }}
             validationSchema={uploadPostSchema}
             validateOnMount={true}>
             {({
@@ -40,7 +45,11 @@ export default function FormikPostUploader() {
                             flexDirection: "row",
                         }}>
                         <Image
-                            source={{ uri: PLACEHOLDER_IMG }}
+                            source={{
+                                uri: validUrl.isUri(thumbnailUrl)
+                                    ? thumbnailUrl
+                                    : PLACEHOLDER_IMG,
+                            }}
                             style={{ width: 100, height: 100 }}
                         />
                         <View style={{ flex: 1, marginLeft: 12 }}>
@@ -57,6 +66,9 @@ export default function FormikPostUploader() {
                     </View>
                     <Divider width={0.2} orientation="vertical" />
                     <TextInput
+                        onChange={(e) => {
+                            setThumbnailUrl(e.nativeEvent.text);
+                        }}
                         style={{ color: "white", fontSize: 18 }}
                         placeholder="Enter image URL..."
                         placeholderTextColor="gray"
