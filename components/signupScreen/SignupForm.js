@@ -1,25 +1,30 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
-
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    Pressable,
+} from "react-native";
+import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Validator from "email-validator";
 
-const LoginForm = ({ navigation }) => {
-    const LoginFormSchema = Yup.object().shape({
+const SignupForm = ({ navigation }) => {
+    const SignupFormSchema = Yup.object().shape({
         email: Yup.string().email().required("An email is required"),
+        username: Yup.string().required().min(2, "A username is required"),
         password: Yup.string()
             .required()
-            .min(8, "Your password must have at least 8 characters."),
+            .min(8, "Your password has to have at least 8 characters"),
     });
-
     return (
         <View style={styles.wrapper}>
             <Formik
-                initialValues={{ email: "", password: "" }}
+                initialValues={{ email: "", username: "", password: "" }}
                 onSubmit={(values) => console.log(values)}
-                validationSchema={LoginFormSchema}
+                validationSchema={SignupFormSchema}
                 validateOnMount={true}>
                 {({
                     handleChange,
@@ -42,14 +47,34 @@ const LoginForm = ({ navigation }) => {
                             ]}>
                             <TextInput
                                 placeholderTextColor="#444"
-                                placeholder="Phone number, username or email"
+                                placeholder="Email"
                                 autoCapitalize="none"
                                 keyboardType="email-address"
-                                textContentType="emailAddress"
                                 autoFocus={true}
                                 onChangeText={handleChange("email")}
                                 onBlur={handleBlur("email")}
                                 value={values.email}
+                            />
+                        </View>
+                        <View
+                            style={[
+                                styles.inputField,
+                                {
+                                    borderColor:
+                                        1 > values.username.length ||
+                                        values.username.length >= 2
+                                            ? "#ccc"
+                                            : "red",
+                                },
+                            ]}>
+                            <TextInput
+                                placeholderTextColor="#444"
+                                placeholder="Username"
+                                autoCapitalize="none"
+                                textContentType="username"
+                                onChangeText={handleChange("username")}
+                                onBlur={handleBlur("username")}
+                                value={values.username}
                             />
                         </View>
                         <View
@@ -75,29 +100,17 @@ const LoginForm = ({ navigation }) => {
                                 value={values.password}
                             />
                         </View>
-                        <View
-                            style={{
-                                alignItems: "flex-end",
-                                marginBottom: 30,
-                            }}>
-                            <Text style={{ color: "#6bb0f5" }}>
-                                Forgot password?
-                            </Text>
-                        </View>
-                        {/* <Button title="Log in" /> */}
                         <Pressable
                             titleSize={20}
                             style={styles.button(isValid)}
                             onPress={handleSubmit}>
-                            <Text style={styles.buttonText}>Log in</Text>
+                            <Text style={styles.buttonText}>Sign Up</Text>
                         </Pressable>
-                        <View style={styles.signupContainer}>
-                            <Text>Don't have an account? </Text>
+                        <View style={styles.loginContainer}>
+                            <Text>Already have an account? </Text>
                             <TouchableOpacity
-                                onPress={() => navigation.push("SignupScreen")}>
-                                <Text style={{ color: "#6bb0f5" }}>
-                                    Sign up
-                                </Text>
+                                onPress={() => navigation.goBack()}>
+                                <Text style={{ color: "#6bb0f5" }}>Log in</Text>
                             </TouchableOpacity>
                         </View>
                     </>
@@ -107,7 +120,7 @@ const LoginForm = ({ navigation }) => {
     );
 };
 
-export default LoginForm;
+export default SignupForm;
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -121,22 +134,23 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ddd",
     },
-    button: (isValid) => ({
-        backgroundColor: isValid ? "#0096f6" : "#9acaf7",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: 42,
-        borderRadius: 4,
-    }),
-    buttonText: {
-        fontWeight: "600",
-        color: "#fff",
-        fontSize: 15,
-    },
-    signupContainer: {
+    loginContainer: {
         flexDirection: "row",
         width: "100%",
         justifyContent: "center",
         marginTop: 50,
+    },
+    button: (isValid) => ({
+        backgroundColor: isValid ? "#6bb0f5" : "#9acaf7",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: 42,
+        borderRadius: 4,
+        marginTop: 50,
+    }),
+    buttonText: {
+        fontWeight: "600",
+        color: "white",
+        fontSize: 15,
     },
 });

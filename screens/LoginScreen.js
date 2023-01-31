@@ -4,7 +4,7 @@ import LoginForm from "../components/loginScreen/LoginForm";
 
 const INSTAGRAM_LOGO = require("../assets/instagram_logo.png");
 
-const LoginScreen = () => (
+const LoginScreen = ({ navigation }) => (
     <View style={styles.container}>
         <View style={styles.logoContainer}>
             <Image
@@ -12,7 +12,7 @@ const LoginScreen = () => (
                 style={{ height: 100, width: 100 }}
             />
         </View>
-        <LoginForm />
+        <LoginForm navigation={navigation} />
         <StatusBar style="auto" />
     </View>
 );
