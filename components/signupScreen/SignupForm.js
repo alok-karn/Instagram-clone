@@ -12,7 +12,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Validator from "email-validator";
 
-import { firebaseAuth } from "../../firebase";
+import { firebaseAuth, db } from "../../firebase";
 import {
     onAuthStateChanged,
     createUserWithEmailAndPassword,
@@ -27,10 +27,26 @@ const SignupForm = ({ navigation }) => {
             .min(8, "Your password has to have at least 8 characters"),
     });
 
+    const getRandomProfilePicture = async () => {
+        const response = await fetch("https://randomuser.me/api/");
+        const data = await response.json();
+        return data.results[0].picture.large;
+    };
+
     const onSignup = async (email, username, password) => {
         try {
-            await createUserWithEmailAndPassword(firebaseAuth, email, password);
+            const authUser = await createUserWithEmailAndPassword(
+                firebaseAuth,
+                email,
+                password
+            );
             console.log("Signed up successfully!");
+            // db.collection("users").add({
+            //     owner_uid: authUser.user.uid,
+            //     username: username,
+            //     email: authUser.user.email,
+            //     profile_picture: await getRandomProfilePicture(),
+            // });
         } catch (error) {
             Alert.alert("Error", error.message);
         }
